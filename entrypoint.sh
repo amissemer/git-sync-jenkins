@@ -16,7 +16,7 @@ if [ ! -f "config.xml" ]; then
 	fi
 fi
 # if the ssh key was not initialized yet
-if [ ! -f "~/.ssh/id_rsa" ]; then
+if [ ! -f ".ssh/id_rsa" ]; then
 #   but was provided in the project image
 	if [ -f "/usr/share/jenkins/ref/.ssh/id_rsa" ]; then
 		cp -Rf /usr/share/jenkins/ref/.ssh ~

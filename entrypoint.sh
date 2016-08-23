@@ -1,13 +1,5 @@
 #!/bin/bash -e
 
-# if upgrade mode
-if [[ $# -eq 1 ]] && [[ "$1" == "upgrade" ]]; then
-	find /usr/share/jenkins/ref/ -type f -exec bash -c "b={}; rm -f  ~/\${b:23}" \;
-	rm -Rf ~/plugins/
-	echo "Cleaned up JENKINS_HOME to prepare for upgrade"
-fi
-
-
 # if first boot of new instance
 if [ ! -f "config.xml" ]; then
 #   if initialization of new project

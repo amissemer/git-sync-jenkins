@@ -1,2 +1,5 @@
-#!/bin/true
-# Dummy executable to avoid jenkins.sh to fail while executing upgrade. The actual upgrade code is in the entrypoint.sh
+#!/bin/bash
+
+find /usr/share/jenkins/ref/ -type f -exec bash -c "b={}; rm -f  ~/\${b:23}" \;
+rm -Rf ~/plugins/
+echo "Cleaned up JENKINS_HOME to prepare for upgrade"

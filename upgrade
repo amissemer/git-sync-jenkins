@@ -1,0 +1,2 @@
+#!/bin/true
+# Dummy executable to avoid jenkins.sh to fail while executing upgrade. The actual upgrade code is in the entrypoint.sh

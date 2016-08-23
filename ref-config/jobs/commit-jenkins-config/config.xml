@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>MESSAGE</name>
+          <description>The git commit message</description>
+          <defaultValue>Jenkins config changed pushed from Jenkins</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.5.3">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>$JENKINS_CONFIG_REPOSITORY</url>
+        <credentialsId>default-git-ssh-key</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>*/$JENKINS_CONFIG_BRANCH</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>false</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.plugins.groovy.SystemGroovy plugin="groovy@1.29">
+      <scriptSource class="hudson.plugins.groovy.StringScriptSource">
+        <command>import jenkins.model.Jenkins
+def plugins = new TreeSet()
+Jenkins.getInstance().getPluginManager().getPlugins().forEach{
+  if (it.isActive())
+	plugins.add(it.shortName+&quot;:&quot;+it.version)
+}
+def pluginFile = new File(&quot;plugins.txt&quot;)
+if (pluginFile.exists() &amp;&amp; !pluginFile.delete()) throw new Exception(&quot;Could not remove &quot;+pluginFile+&quot;:&quot;+e)
+plugins.forEach{pluginFile &lt;&lt; it+&apos;\n&apos; }
+</command>
+      </scriptSource>
+      <bindings></bindings>
+      <classpath></classpath>
+    </hudson.plugins.groovy.SystemGroovy>
+    <hudson.tasks.Shell>
+      <command>VERSIONED_CONFIG=$WORKSPACE/jenkins-config
+rsync --delete -avz --exclude workspace --exclude war --exclude logs --exclude .ssh --exclude identity.key* --exclude plugins --exclude updates --exclude &quot;secret*&quot; --exclude nodes --exclude &quot;*.log&quot; $JENKINS_HOME/ $VERSIONED_CONFIG/
+
+cd $WORKSPACE
+rm -Rf jenkins-config/logs jenkins-config/plugins jenkins-config/jenkins_home
+
+GIT_USER=${BUILD_USER:-admin}
+GIT_EMAIL=${BUILD_USER_EMAIL:-jenkins-admin@localhost}
+git config push.default simple
+git config user.email &quot;$GIT_EMAIL&quot;
+git config user.name &quot;$GIT_USER&quot;
+git add --all
+# Avoid adding files if they are the same as the current jenkins/ref
+diff -rqs ./jenkins-config /usr/share/jenkins/ref  | grep identical | awk &apos;{print $2}&apos; | xargs --no-run-if-empty git reset -- 
+git commit -m &quot;$MESSAGE&quot;
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.plugins.git.GitPublisher plugin="git@2.5.3">
+      <configVersion>2</configVersion>
+      <pushMerge>false</pushMerge>
+      <pushOnlyIfSuccess>true</pushOnlyIfSuccess>
+      <forcePush>false</forcePush>
+      <branchesToPush>
+        <hudson.plugins.git.GitPublisher_-BranchToPush>
+          <targetRepoName>origin</targetRepoName>
+          <branchName>$JENKINS_CONFIG_BRANCH</branchName>
+        </hudson.plugins.git.GitPublisher_-BranchToPush>
+      </branchesToPush>
+    </hudson.plugins.git.GitPublisher>
+  </publishers>
+  <buildWrappers>
+    <org.jenkinsci.plugins.builduser.BuildUser plugin="build-user-vars-plugin@1.5"/>
+  </buildWrappers>
+</project>

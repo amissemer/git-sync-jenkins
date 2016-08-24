@@ -10,9 +10,15 @@ ENV BASE_PLUGINS \
 	build-user-vars \
 	git \
 	groovy
+	
 RUN install-plugins.sh $BASE_PLUGINS
 
 COPY ref-config /usr/share/jenkins/ref
 COPY entrypoint.sh  /usr/local/bin/
 COPY upgrade /usr/local/bin/
+
+# Default location of the Jenkins configuration files, from the root of the git repository (used by the commit-jenkins-config job)
+# Can be overriden in child images or docker-compose.yml file
+ENV JENKINS_CONFIG_PATH=jenkins-config
+
 ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]

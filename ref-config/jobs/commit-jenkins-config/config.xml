@@ -55,11 +55,11 @@ plugins.forEach{pluginFile &lt;&lt; it+&apos;\n&apos; }
       <classpath></classpath>
     </hudson.plugins.groovy.SystemGroovy>
     <hudson.tasks.Shell>
-      <command>VERSIONED_CONFIG=$WORKSPACE/jenkins-config
+      <command>VERSIONED_CONFIG=$WORKSPACE/$JENKINS_CONFIG_PATH
 rsync --delete -avz --exclude workspace --exclude war --exclude logs --exclude .ssh --exclude identity.key* --exclude plugins --exclude updates --exclude &quot;secret*&quot; --exclude nodes --exclude &quot;*.log&quot; $JENKINS_HOME/ $VERSIONED_CONFIG/
 
 cd $WORKSPACE
-rm -Rf jenkins-config/logs jenkins-config/plugins jenkins-config/jenkins_home
+rm -Rf $JENKINS_CONFIG_PATH/logs $JENKINS_CONFIG_PATH/plugins $JENKINS_CONFIG_PATH/jenkins_home
 
 GIT_USER=${BUILD_USER:-admin}
 GIT_EMAIL=${BUILD_USER_EMAIL:-jenkins-admin@localhost}
@@ -68,7 +68,7 @@ git config user.email &quot;$GIT_EMAIL&quot;
 git config user.name &quot;$GIT_USER&quot;
 git add --all
 # Avoid adding files if they are the same as the current jenkins/ref
-diff -rqs ./jenkins-config /usr/share/jenkins/ref  | grep identical | awk &apos;{print $2}&apos; | xargs --no-run-if-empty git reset -- 
+diff -rqs ./$JENKINS_CONFIG_PATH /usr/share/jenkins/ref  | grep identical | awk &apos;{print $2}&apos; | xargs --no-run-if-empty git reset -- 
 git commit -m &quot;$MESSAGE&quot;
 </command>
     </hudson.tasks.Shell>

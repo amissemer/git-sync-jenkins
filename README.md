@@ -3,6 +3,10 @@ A Jenkins Docker image with a git-backed configuration support
 
 This Docker image is based on the [official Jenkins](https://hub.docker.com/_/jenkins/) Docker image, but adds the capability to manage the configuration of your Jenkins instance in git repositories.
 
+Variants
+----
+ * The swarm variant preinstalls the swarm plugin, for easy use with the [amissemer/jenkins-swarm-slave-with-docker](https://hub.docker.com/r/amissemer/jenkins-swarm-slave-with-docker) image
+
 Use-cases
 ---------
  * Commit the state of your Jenkins instance configuration, when it is ready

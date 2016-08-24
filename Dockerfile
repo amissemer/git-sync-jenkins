@@ -9,11 +9,11 @@ WORKDIR $JENKINS_HOME
 ENV BASE_PLUGINS \
 	build-user-vars \
 	git \
-	groovy
+	groovy \
+	swarm
 RUN install-plugins.sh $BASE_PLUGINS
 
 COPY ref-config /usr/share/jenkins/ref
 COPY entrypoint.sh  /usr/local/bin/
 COPY upgrade /usr/local/bin/
-ENTRYPOINT []
-CMD ["/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]

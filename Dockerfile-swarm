@@ -9,7 +9,8 @@ WORKDIR $JENKINS_HOME
 ENV BASE_PLUGINS \
 	build-user-vars \
 	git \
-	groovy
+	groovy \
+	swarm
 RUN install-plugins.sh $BASE_PLUGINS
 
 COPY ref-config /usr/share/jenkins/ref

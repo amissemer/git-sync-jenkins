@@ -17,3 +17,5 @@ Usage
 -----
 
 Use [this template](https://github.com/amissemer/jenkins-config-template) to get started with this image. Instructions are provided for above use cases.
+
+[![](https://images.microbadger.com/badges/image/amissemer/git-sync-jenkins.svg)](https://microbadger.com/images/amissemer/git-sync-jenkins "Get your own image badge on microbadger.com")

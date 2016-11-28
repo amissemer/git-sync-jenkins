@@ -21,6 +21,8 @@ if [[ $# -lt 1 ]] || [[ "$1" == "-"* ]]; then
 #       not provided, we generate a new one
 			ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa
 		fi
+# copy the *public* key to the userContent folder to give visibility to other containers
+		mkdir -p ~/userContent/ && cp -f ~/.ssh/id_rsa.pub ~/userContent/id_rsa.pub.txt
 	else
 # was initialized, let's make sure the permissions are correct
 		chmod 700 ~/.ssh

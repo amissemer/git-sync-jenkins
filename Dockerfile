@@ -1,5 +1,5 @@
-FROM jenkins:2.7.2
-MAINTAINER adrien.missemer@gmail.com
+FROM jenkins:2.19.1
+MAINTAINER Adrien Missemer <adrien.missemer@gmail.com>
 
 USER root
 RUN apt-get update && apt-get install -y rsync && rm -rf /var/lib/apt/lists/*

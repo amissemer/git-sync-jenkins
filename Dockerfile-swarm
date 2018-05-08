@@ -1,4 +1,4 @@
-FROM jenkins:2.19.1
+FROM jenkins/jenkins:2.107.2
 MAINTAINER Adrien Missemer <adrien.missemer@gmail.com>
 
 USER root
@@ -21,4 +21,4 @@ COPY upgrade /usr/local/bin/
 # Can be overriden in child images or docker-compose.yml file
 ENV JENKINS_CONFIG_PATH=jenkins-config
 
-ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["tini", "--", "/usr/local/bin/entrypoint.sh"]

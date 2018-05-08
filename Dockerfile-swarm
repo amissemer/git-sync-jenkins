@@ -21,4 +21,4 @@ COPY upgrade /usr/local/bin/
 # Can be overriden in child images or docker-compose.yml file
 ENV JENKINS_CONFIG_PATH=jenkins-config
 
-ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["tini", "--", "/usr/local/bin/entrypoint.sh"]

@@ -1,4 +1,4 @@
-FROM jenkins:2.19.1
+FROM jenkins/jenkins:2.107.2
 MAINTAINER Adrien Missemer <adrien.missemer@gmail.com>
 
 USER root
